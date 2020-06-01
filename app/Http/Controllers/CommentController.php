@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\TopicRequest;
-use App\Topic;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Comment;
+use App\Http\Requests\CommentRequest;
 use Illuminate\Http\Request;
 
-class TopicController extends Controller
+class CommentController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,11 +15,7 @@ class TopicController extends Controller
      */
     public function index()
     {
-        $topics = Topic::with('user')
-            ->orderBy('id', 'desc')
-            ->paginate();
-
-        return view('home', compact('topics'));
+        //
     }
 
     /**
@@ -28,9 +23,8 @@ class TopicController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        return view('topic.form');
     }
 
     /**
@@ -39,14 +33,17 @@ class TopicController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(TopicRequest $request)
+    public function store(CommentRequest $request)
     {
-        $topic = new Topic();
-
         $request->request->add(['user_id' => auth()->user()->id]);
-        $topic->create($request->only(['title', 'content', 'user_id']));
 
-        return redirect()->route('topics.index');
+        $comment = new Comment();
+        $comment->create($request->only(['topic_id', 'comment', 'user_id']));
+
+        return back()->with('save_status', [
+            'message' => 'Your comment saved',
+            'status' => 'success'
+        ]);
     }
 
     /**
@@ -68,13 +65,7 @@ class TopicController extends Controller
      */
     public function edit($id)
     {
-        $topic = Topic::where('id' , $id)
-            ->with(['comments' => function ($query) {
-                return $query->with('user')->orderBy('id', 'desc');
-            }])
-            ->firstOrFail();
-
-        return view('topic.form', compact('topic'));
+        //
     }
 
     /**
@@ -84,19 +75,9 @@ class TopicController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(TopicRequest $request, $id)
+    public function update(Request $request, $id)
     {
-        $topic = Topic::where('id' , $id)
-            ->firstOrFail();
-
-        $topic->title = $request->title;
-        $topic->content = $request->content;
-        $topic->save();
-
-        return back()->with('save_status', [
-            'message' => 'Update success',
-            'status' => 'success'
-        ]);
+        //
     }
 
     /**
