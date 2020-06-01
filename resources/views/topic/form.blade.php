@@ -16,7 +16,6 @@
             @endif
             <form class="card" method="post" action="{{ $isCreate ? route('topics.store') : route('topics.update', $topic->id ?? 0) }}">
                 @method($isCreate ? 'post' : 'put')
-                @csrf
                 <div class="card-header">
                     <h3 class="card-title">{{ $isCreate ? 'Create' : 'Edit' }} topic</h3>
                 </div>
@@ -53,16 +52,6 @@
             </form>
         </div>
         <div class="col-12">
-            @forelse ($topic->comments as $comment)
-            <div class="card mb-2">
-                <div class="card-body">
-                    <h5>By {{ $comment->user->name }} ({{ $comment->created_at }})</h5>
-                    <div class="p-2">{{ $comment->comment }}</div>
-                </div>
-            </div>
-            @empty
-            <h5 class="text-center">No comment yet</h5>
-            @endforelse
         </div>
     </div>
     @endif

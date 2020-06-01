@@ -69,9 +69,6 @@ class TopicController extends Controller
     public function edit($id)
     {
         $topic = Topic::where('id' , $id)
-            ->with(['comments' => function ($query) {
-                return $query->with('user')->orderBy('id', 'desc');
-            }])
             ->firstOrFail();
 
         return view('topic.form', compact('topic'));
