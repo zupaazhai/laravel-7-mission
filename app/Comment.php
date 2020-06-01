@@ -12,6 +12,11 @@ class Comment extends Model
         'comment'
     ];
 
+    /**
+     * Relation with table user
+     *
+     * @return App\Comment
+     */
     public function user()
     {
         return $this->belongsTo('App\User', 'user_id', 'id');
