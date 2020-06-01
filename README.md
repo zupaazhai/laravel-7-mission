@@ -1,12 +1,5 @@
 # Laravel 7 Mission
 
-ให้ผู้ร่วมทดสอบ ทำแบบทดสอบความรู้พื้นฐานการใช้งาน Laravel ดังต่อไปนี้ โดยสร้าง branch ใช้ชื่อภาษาอังกฤษของตัวเอง เช่น john-doe
-โดยเมื่อทำภารกิจครบทุกข้อแล้วให้ Pull Request มายัง branch master
+โจทย์อยู่ใน slide ด้านล่างนี้ คลิก เบาๆ แล้วไปกันเลย
 
-- [ ] เริ่มต้นโดยการติดตั้ง source code ลงบนเครื่อง ให้พร้อมสำหรับการเริ่มต้นพัฒนา
-- [ ] โปรดเช็คให้แน่ใจว่าไฟล์ .env ถูกสร้างขึ้นมาแล้ว และ value ของ APP_KEY ถูกสร้างขึ้นมาแล้ว
-- [ ] อัพเดทค่าใน .env เพื่อให้สามารถเชื่อมต่อกับ Database ได้
-- [ ] ถ้าทุกอย่างพร้อมแล้ว รัน migrate ได้เล้ยยย
-- [ ] ตอนนี้ยังไม่มี user อยู่ในระบบ ให้สร้าง user ผ่านหน้า form register ของระบบ
-- [ ] เมื่อ login เข้ามาในระบบแล้ว จะเห็นตาราง topic ที่ยังไม่มีข้อมูลใดถูกสร้าง ตอนนี้ด้านบนขวาของตาราง มี ปุ่มสีเขียว (New Topic) วางเอาไว้ ช่วยสร้าง Link ที่ปุ่ม เพื่อไปยังหน้า /topics/create ให้ที
-- [ ] ในหน้า form การสร้าง topic ตอนนี้เรามี form ทุกอย่างพร้อมแล้ว แต่ ตอนนี้เจอปัญหาไม่สามารถ submit form เพื่อไปสร้าง topic ได้ ช่วยเราแก้ปัญหาตรงนี้หน่อยสิ
+(https://docs.google.com/presentation/d/13tJ08CjUUNxKMgLpvagjKtdrIx7jSdvDii5tcaeVwG4/edit?usp=sharing)[https://docs.google.com/presentation/d/13tJ08CjUUNxKMgLpvagjKtdrIx7jSdvDii5tcaeVwG4/edit?usp=sharing]
