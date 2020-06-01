@@ -35,11 +35,6 @@ class CommentController extends Controller
      */
     public function store(CommentRequest $request)
     {
-        $request->request->add(['user_id' => auth()->user()->id]);
-
-        $comment = new Comment();
-        $comment->create($request->only(['topic_id', 'comment', 'user_id']));
-
         return back()->with('save_status', [
             'message' => 'Your comment saved',
             'status' => 'success'
