@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-12">
             <div class="mb-2 text-right">
-                <a class="btn btn-success" href="{{ route('topics.create') }}">New Topic</a>
+                <a class="btn btn-success" href="#">New Topic</a>
             </div>
             <table class="table table-bordered bg-white table-hover">
                 <thead>
