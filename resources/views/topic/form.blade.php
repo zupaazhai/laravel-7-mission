@@ -53,6 +53,16 @@
             </form>
         </div>
         <div class="col-12">
+            @foreach ($topic->comments->sortByDesc('created_at') as $comment)
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <b>{{$comment->user->name}} ({{$comment->created_at}})</b>
+                        </h5>
+                        <p class="card-text p-2">{{$comment->comment}}</p>
+                    </div>
+                </div>
+            @endforeach
         </div>
     </div>
     @endif
