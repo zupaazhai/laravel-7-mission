@@ -35,6 +35,7 @@
                     @endforelse
                 </tbody>
             </table>
+            {{ $topics->links() }}
         </div>
     </div>
 </div>
