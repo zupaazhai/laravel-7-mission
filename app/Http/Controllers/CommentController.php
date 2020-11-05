@@ -35,6 +35,11 @@ class CommentController extends Controller
      */
     public function store(CommentRequest $request)
     {
+        $comment = new Comment();
+
+        $request->request->add(['user_id' => auth()->user()->id]);
+        $comment->create($request->only(['topic_id', 'user_id', 'comment']));
+
         return back()->with('save_status', [
             'message' => 'Your comment saved',
             'status' => 'success'
@@ -81,8 +86,15 @@ class CommentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Comment $comment)
     {
-        //
+        if (auth()->check() && auth()->user()->id === $comment->user->id) {
+            $comment->delete();
+        }
+
+        return back()->with('delete_status', [
+            'message' => 'Your comment deleted',
+            'status' => 'success'
+        ]);
     }
 }

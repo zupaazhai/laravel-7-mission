@@ -16,6 +16,7 @@
             @endif
             <form class="card" method="post" action="{{ $isCreate ? route('topics.store') : route('topics.update', $topic->id ?? 0) }}">
                 @method($isCreate ? 'post' : 'put')
+                @csrf
                 <div class="card-header">
                     <h3 class="card-title">{{ $isCreate ? 'Create' : 'Edit' }} topic</h3>
                 </div>
@@ -52,6 +53,28 @@
             </form>
         </div>
         <div class="col-12">
+            @foreach ($topic->comments->sortByDesc('created_at') as $comment)
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <b>{{$comment->user->name ?? ''}} ({{$comment->created_at}})</b>
+                            @if(auth()->user()->id === $comment->user->id)
+                                <small
+                                    class="text-danger"
+                                    style="cursor: pointer;"
+                                    onclick="document.getElementById('delete-comment-form').submit();">
+                                        Delete
+                                </small>
+                                <form id="delete-comment-form" action="{{route('comments.destroy', $comment)}}" method="post">
+                                    @method('delete')
+                                    @csrf
+                                </form>
+                            @endif
+                        </h5>
+                        <p class="card-text p-2">{{$comment->comment}}</p>
+                    </div>
+                </div>
+            @endforeach
         </div>
     </div>
     @endif
