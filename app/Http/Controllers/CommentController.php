@@ -86,8 +86,15 @@ class CommentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Comment $comment)
     {
-        //
+        if (auth()->check() && auth()->user()->id === $comment->user->id) {
+            $comment->delete();
+        }
+
+        return back()->with('delete_status', [
+            'message' => 'Your comment deleted',
+            'status' => 'success'
+        ]);
     }
 }
