@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Topic extends Model
 {
-    public $fillable = [];
+    public $fillable = ['title', 'content', 'user_id'];
 
     /**
      * Relation with table user
