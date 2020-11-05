@@ -26,7 +26,7 @@
                         </td>
                         <td>{{ $topic->user->name }}</td>
                         <td>{{ $topic->created_at }}</td>
-                        <td>99</td>
+                        <td>{{ $topic->comments->count() }}</td>
                     </tr>
                     @empty
                     <tr>
