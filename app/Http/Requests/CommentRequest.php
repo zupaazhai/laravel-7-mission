@@ -25,7 +25,7 @@ class CommentRequest extends FormRequest
     {
         return [
             'topic_id' => 'required',
-            'comment' => 'required'
+            'description' => 'required'
         ];
     }
 }
