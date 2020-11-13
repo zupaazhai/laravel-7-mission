@@ -4,8 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\TopicRequest;
 use App\Topic;
+use App\Comment;
+use App\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 
 class TopicController extends Controller
 {
@@ -14,13 +18,22 @@ class TopicController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
+        $user = auth()->user();
+        // dd($users);
+        $comments = Comment::with('user')
+            ->orderBy('id', 'desc')
+            ->paginate(5);
         $topics = Topic::with('user')
             ->orderBy('id', 'desc')
             ->paginate();
-
-        return view('home', compact('topics'));
+        return view('home', compact('topics','comments'));
     }
 
     /**
@@ -42,10 +55,9 @@ class TopicController extends Controller
     public function store(TopicRequest $request)
     {
         $topic = new Topic();
-
         $request->request->add(['user_id' => auth()->user()->id]);
         $topic->create($request->only(['title', 'content', 'user_id']));
-
+        //$topic->create($request->all());
         return redirect()->route('topics.index');
     }
 
@@ -70,8 +82,15 @@ class TopicController extends Controller
     {
         $topic = Topic::where('id' , $id)
             ->firstOrFail();
-
-        return view('topic.form', compact('topic'));
+        // $comments = DB::table('comments')
+        // ->where('topic_id', '>=', $id)
+        // ->orderBy('created_at', 'DESC')
+        // ->get();
+        $comments = Comment::with('user')
+        ->where('topic_id', '=', $id)
+        ->orderBy('id', 'desc')
+        ->paginate(5);
+        return view('topic.form', ['comments'=>$comments],compact('topic', 'comments'));
     }
 
     /**

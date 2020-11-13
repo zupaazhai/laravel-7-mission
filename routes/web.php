@@ -20,5 +20,10 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::resource('topics', 'TopicController');
-Route::resource('comments', 'CommentController');
+Route::resource('topics', 'TopicController')->except(['store']);
+Route::resource('comments', 'CommentController')->except(['store']);
+// Route::get('/topics/create','TopicController@create')->name('topics.create');
+Route::post('/topics','TopicController@store')->name('topics.store');
+// Route::put('/topics/{user}', 'TopicController@update')->name('topics.update');
+
+ Route::post('/comments','CommentController@store')->name('comments.store');

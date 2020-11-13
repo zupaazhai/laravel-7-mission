@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Topic extends Model
 {
-    public $fillable = [];
+    protected $fillable = ['title','user_id','content'];
 
     /**
      * Relation with table user
@@ -16,5 +16,9 @@ class Topic extends Model
     public function user()
     {
         return $this->belongsTo('App\User', 'user_id', 'id');
+    }
+    public function comment ()
+    {
+        return $this->hasMany('App\Comment', 'topic_id', 'id');
     }
 }

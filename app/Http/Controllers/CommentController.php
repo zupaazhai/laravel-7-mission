@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Comment;
+use App\User;
 use App\Http\Requests\CommentRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class CommentController extends Controller
 {
@@ -13,9 +16,13 @@ class CommentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function index()
     {
-        //
+
     }
 
     /**
@@ -33,8 +40,14 @@ class CommentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CommentRequest $request)
+    public function store(Request $request)
     {
+        $data = request();
+        $comment = new Comment();
+        
+        $request['user_id']= auth()->user()->id;
+        $comment->create(['topic_id'=>$data['topic_id'], 'user_id' => $data['user_id'], 'description' =>  $data['comment']]);
+        
         return back()->with('save_status', [
             'message' => 'Your comment saved',
             'status' => 'success'
@@ -81,8 +94,17 @@ class CommentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, Comment $comment)
     {
-        //
+        
+        $this->authorize('delete',$comment);
+        // if(Gate::allows('delete-comment', $comment)) {
+		// 	$comment->delete();
+		// } else {
+		// 	abort(403);
+		// }
+        DB::table('comments')->where('id',$comment->id)->delete();
+        // auth()->user()->comment()->where('id',$id)->delete();
+        return back();
     }
 }
