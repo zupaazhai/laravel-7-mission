@@ -18,7 +18,7 @@ class TopicController extends Controller
     {
         $topics = Topic::with('user')
             ->orderBy('id', 'desc')
-            ->paginate();
+            ->paginate(10);
 
         return view('home', compact('topics'));
     }
@@ -41,6 +41,8 @@ class TopicController extends Controller
      */
     public function store(TopicRequest $request)
     {
+      
+
         $topic = new Topic();
 
         $request->request->add(['user_id' => auth()->user()->id]);
@@ -69,8 +71,10 @@ class TopicController extends Controller
     public function edit($id)
     {
         $topic = Topic::where('id' , $id)
-            ->firstOrFail();
-
+        ->with(['comments' => function ($query) {
+            return $query->with('user')->orderBy('id', 'desc');
+        }])
+        ->firstOrFail();
         return view('topic.form', compact('topic'));
     }
 
@@ -104,6 +108,6 @@ class TopicController extends Controller
      */
     public function destroy($id)
     {
-        //
+    
     }
 }

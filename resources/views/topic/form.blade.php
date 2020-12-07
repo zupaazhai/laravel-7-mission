@@ -4,6 +4,7 @@
 
 @php
     $isCreate = Request::route()->getName() == 'topics.create';
+    $isComment = Request::route()->getName() == 'comments.create';
 @endphp
 
 <div class="container">
@@ -14,8 +15,9 @@
                 {{ session()->get('save_status')['message'] }}
             </div>
             @endif
-            <form class="card" method="post" action="{{ $isCreate ? route('topics.store') : route('topics.update', $topic->id ?? 0) }}">
-                @method($isCreate ? 'post' : 'put')
+            <form class="card" method="POST" action="{{ $isCreate ? route('topics.store') : route('topics.update', $topic->id ?? 0) }}">
+                @method($isCreate ? 'POST' : 'put')
+                @csrf
                 <div class="card-header">
                     <h3 class="card-title">{{ $isCreate ? 'Create' : 'Edit' }} topic</h3>
                 </div>
@@ -32,7 +34,7 @@
                     </div>
                 </div>
                 <div class="card-footer">
-                    <button class="btn btn-success">{{ $isCreate ? 'New' : 'Update' }} topic</button>
+                    <button type="submit" class="btn btn-success">{{ $isCreate ? 'New' : 'Update' }} topic</button>
                 </div>
             </form>
         </div>
@@ -49,11 +51,50 @@
                     <textarea name="comment" class="form-control" placeholder="Write your comment here..." id="" cols="4" rows="4"></textarea>
                 </div>
                 <button class="btn btn-primary">Comment</button>
+                <div class="col-12">
+            
+            
             </form>
+            
         </div>
-        <div class="col-12">
-        </div>
+
+        @forelse ($topic->comments as $comment)
+            <div class="card mb-2">
+                <div class="card-body">
+            
+                    <h5 style="display: inline">By {{ $comment->user->name }} ({{ $comment->created_at }}) </h5>
+
+                    @if ($comment->user_id == Auth::id())
+                         <form action="{{ route('comments.destroy', $comment->id)}}" method="post" style="display: inline">
+                         @method('DELETE')
+                        @csrf
+                         <input class="btdelete" type="submit" value="Delete" />
+                        </form>
+                    @endif
+                    
+
+                    <div class="p-2">{{ $comment->comment }}</div>
+            
+                </div>
+            </div>
+           
+            @empty
+            <h5 class="text-center">No comment yet</h5>
+        @endforelse
     </div>
+
+
+
+    </div>    
+
+   </div>
+        
     @endif
+   
+    
+    
+
+                
+
 </div>
 @endsection

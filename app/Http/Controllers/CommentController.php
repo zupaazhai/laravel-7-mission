@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Comment;
 use App\Http\Requests\CommentRequest;
+use App\Comment;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
@@ -15,7 +16,7 @@ class CommentController extends Controller
      */
     public function index()
     {
-        //
+       
     }
 
     /**
@@ -23,8 +24,9 @@ class CommentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
+    public function create()
     {
+        return view('topic.form');
     }
 
     /**
@@ -35,6 +37,11 @@ class CommentController extends Controller
      */
     public function store(CommentRequest $request)
     {
+        $request->request->add(['user_id' => auth()->user()->id]);
+
+        $comment = new Comment();
+        $comment->create($request->only(['topic_id', 'comment', 'user_id']));
+
         return back()->with('save_status', [
             'message' => 'Your comment saved',
             'status' => 'success'
@@ -49,7 +56,7 @@ class CommentController extends Controller
      */
     public function show($id)
     {
-        //
+        
     }
 
     /**
@@ -81,8 +88,17 @@ class CommentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, Comment $comment)
     {
-        //
+        
+       
+        $comment->delete();
+        return back()->with('save_status', [
+            'message' => 'Your comment deleted',
+            'status' => 'success'
+        ]);
+
+       
+
     }
 }
