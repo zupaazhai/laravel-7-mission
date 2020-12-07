@@ -100,6 +100,16 @@ p {
   margin-bottom: 1rem;
 }
 
+.btdelete {
+  background-color: Transparent;
+  background-repeat:no-repeat;
+  border: none;
+  cursor:pointer;
+  overflow: hidden;
+  outline:none;
+  color: red;
+}
+
 abbr[title],
 abbr[data-original-title] {
   text-decoration: underline;
@@ -110,6 +120,9 @@ abbr[data-original-title] {
   -webkit-text-decoration-skip-ink: none;
           text-decoration-skip-ink: none;
 }
+
+
+
 
 address {
   margin-bottom: 1rem;
@@ -415,6 +428,8 @@ h5,
 h6,
 .h6 {
   font-size: 0.9rem;
+    color : red;
+  
 }
 
 .lead {
@@ -2705,6 +2720,12 @@ fieldset:disabled a.btn {
 }
 
 .btn-primary {
+  color: #fff;
+  background-color: #3490dc;
+  border-color: #3490dc;
+}
+
+.btn-delete {
   color: #fff;
   background-color: #3490dc;
   border-color: #3490dc;

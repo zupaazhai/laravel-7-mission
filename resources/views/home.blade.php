@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-12">
             <div class="mb-2 text-right">
-                <a class="btn btn-success" href="#">New Topic</a>
+                <a class="btn btn-success" href="{{ route('topics.create') }}">New Topic</a>
             </div>
             <table class="table table-bordered bg-white table-hover">
                 <thead>
@@ -26,7 +26,8 @@
                         </td>
                         <td>{{ $topic->user->name }}</td>
                         <td>{{ $topic->created_at }}</td>
-                        <td>99</td>
+                        <td>{{ $topic->total_comment }}</td>
+                        
                     </tr>
                     @empty
                     <tr>
@@ -38,4 +39,6 @@
         </div>
     </div>
 </div>
+{{ $topics->links() }}
+
 @endsection
