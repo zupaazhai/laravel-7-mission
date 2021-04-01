@@ -35,6 +35,10 @@ class CommentController extends Controller
      */
     public function store(CommentRequest $request)
     {
+        $comment = new Comment();
+        $request->request->add(['user_id' => auth()->user()->id]);
+        $comment->create($request->only(['topic_id', 'user_id', 'comment']));
+
         return back()->with('save_status', [
             'message' => 'Your comment saved',
             'status' => 'success'
@@ -83,6 +87,12 @@ class CommentController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $comment = Comment::where('id' , $id)
+            ->delete();
+
+        return back()->with('save_status', [
+            'message' => 'Delete success',
+            'status' => 'success'
+        ]);
     }
 }
