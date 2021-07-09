@@ -15,7 +15,7 @@ class CommentController extends Controller
      */
     public function index()
     {
-        //
+        return view('topic.form');
     }
 
     /**
@@ -25,6 +25,7 @@ class CommentController extends Controller
      */
     public function create(Request $request)
     {
+        //
     }
 
     /**
@@ -35,6 +36,11 @@ class CommentController extends Controller
      */
     public function store(CommentRequest $request)
     {
+        $comment = new Comment();
+
+        $request->request->add(['user_id' => auth()->user()->id]);
+        $comment->create($request->only(['topic_id', 'user_id', 'comment']));
+
         return back()->with('save_status', [
             'message' => 'Your comment saved',
             'status' => 'success'
@@ -83,6 +89,11 @@ class CommentController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $comments=Comment::where('id', $id);
+        $comments->delete();
+        return back()->with('save_status', [
+            'message' => 'Your comment deleted',
+            'status' => 'success'
+        ]);
     }
 }

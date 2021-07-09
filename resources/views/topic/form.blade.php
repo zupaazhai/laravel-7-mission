@@ -15,6 +15,7 @@
             </div>
             @endif
             <form class="card" method="post" action="{{ $isCreate ? route('topics.store') : route('topics.update', $topic->id ?? 0) }}">
+                @csrf
                 @method($isCreate ? 'post' : 'put')
                 <div class="card-header">
                     <h3 class="card-title">{{ $isCreate ? 'Create' : 'Edit' }} topic</h3>
@@ -54,6 +55,27 @@
         <div class="col-12">
         </div>
     </div>
+
+@forelse ($topic->comments as $comment)
+    <div class="card-body">
+        <h4 style="display: inline">By {{ $comment->user->name }} ({{ $comment->created_at }})</h4>
+        @if ($comment->user_id == Auth::id())
+        <form action="{{ route('comments.destroy',$comment->id)}}" method="post" style="display: inline">
+            @method('DELETE')
+            @csrf
+            <input class="btn btn-danger" type="submit" value="Delete">
+        </form>
+        @endif
+        <div style="padding-left:20px"> {{ $comment->comment }} </div>
+   </div>
+   @empty
+   <div class="card-body">
+    <h4>No comment found</h4>
+   </div>
+@endforelse
+
+
+
     @endif
 </div>
 @endsection

@@ -18,7 +18,7 @@ class TopicController extends Controller
     {
         $topics = Topic::with('user')
             ->orderBy('id', 'desc')
-            ->paginate();
+            ->paginate(10);
 
         return view('home', compact('topics'));
     }
@@ -41,6 +41,7 @@ class TopicController extends Controller
      */
     public function store(TopicRequest $request)
     {
+
         $topic = new Topic();
 
         $request->request->add(['user_id' => auth()->user()->id]);
