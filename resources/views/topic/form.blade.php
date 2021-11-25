@@ -15,6 +15,7 @@
             </div>
             @endif
             <form class="card" method="post" action="{{ $isCreate ? route('topics.store') : route('topics.update', $topic->id ?? 0) }}">
+                @csrf
                 @method($isCreate ? 'post' : 'put')
                 <div class="card-header">
                     <h3 class="card-title">{{ $isCreate ? 'Create' : 'Edit' }} topic</h3>
@@ -52,6 +53,21 @@
             </form>
         </div>
         <div class="col-12">
+            @foreach($comments as $comment)
+            <div class="card mb-3">
+                <form action="{{ route('comments.destroy', $comment->id) }}" method="post">
+                    {{ method_field('DELETE') }}
+                    @csrf
+                    <h5 class="card-title pl-3 pt-3">
+                        <b>By {{$comment->user->name}} ({{$comment->updated_at}})</b>
+                        @if($comment->user->id == auth()->user()->id)
+                            <a class="pl-3 text-danger" onclick="this.closest('form').submit();return false;">Delete</a>
+                        @endif
+                    </h5>
+                </from>
+                <p class="card-text pl-5 pb-3">{{$comment->comment}}</p>
+            </div>
+            @endforeach
         </div>
     </div>
     @endif
