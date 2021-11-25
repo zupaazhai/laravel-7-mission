@@ -18,7 +18,7 @@ class TopicController extends Controller
     {
         $topics = Topic::with('user')
             ->orderBy('id', 'desc')
-            ->paginate();
+            ->paginate(10);
 
         return view('home', compact('topics'));
     }
@@ -70,8 +70,12 @@ class TopicController extends Controller
     {
         $topic = Topic::where('id' , $id)
             ->firstOrFail();
+        $comments = Topic::find($id)->comments()
+            ->where('topic_id', $id)
+            ->orderBy('updated_at', 'desc')
+            ->get();
 
-        return view('topic.form', compact('topic'));
+        return view('topic.form', compact('topic','comments'));
     }
 
     /**

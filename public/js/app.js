@@ -49839,8 +49839,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/supachaiw/Workspace/simple-webboard/www/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /Users/supachaiw/Workspace/simple-webboard/www/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Users\GeYoTin\Desktop\laravel-7-mission\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Users\GeYoTin\Desktop\laravel-7-mission\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
