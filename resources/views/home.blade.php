@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-12">
             <div class="mb-2 text-right">
-                <a class="btn btn-success" href="#">New Topic</a>
+                <a class="btn btn-success" href="{{ route('topics.create') }}">New Topic</a>
             </div>
             <table class="table table-bordered bg-white table-hover">
                 <thead>
@@ -18,7 +18,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse ($topics as $topic)
+                    @php($i=0)
+                    @forelse ($topics ?? '' as $topic)
                     <tr>
                         <td>{{ $topic->id }}</td>
                         <td>
@@ -26,13 +27,20 @@
                         </td>
                         <td>{{ $topic->user->name }}</td>
                         <td>{{ $topic->created_at }}</td>
-                        <td>99</td>
+                        <td>{{ $rows[$i] }}</td>
                     </tr>
+                    @php($i++)
                     @empty
                     <tr>
                         <td colspan="5">No topic found</td>
                     </tr>
                     @endforelse
+                    <tr>
+                        <tr>
+                <td colspan="5">
+                {!! $topics->appends(Request::all())->links() !!}
+                </td>
+                </tr>
                 </tbody>
             </table>
         </div>
