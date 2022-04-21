@@ -15,7 +15,8 @@
             </div>
             @endif
             <form class="card" method="post" action="{{ $isCreate ? route('topics.store') : route('topics.update', $topic->id ?? 0) }}">
-                @method($isCreate ? 'post' : 'put')
+            @csrf
+            @method($isCreate ? 'post' : 'put')
                 <div class="card-header">
                     <h3 class="card-title">{{ $isCreate ? 'Create' : 'Edit' }} topic</h3>
                 </div>
@@ -52,6 +53,29 @@
             </form>
         </div>
         <div class="col-12">
+        <table class="table table-bordered bg-white table-hover">
+                <tbody>
+                    @forelse ($comments ?? '' as $comment)
+                    <tr>
+                        <td><form action="{{route('comments.destroy',$comment->id)}}" method="POST">
+                            BY {{ $comment->name }} ({{ $comment->created_at }}) 
+                        @if(old('name', auth()->user()->id) ==  $comment->user_id )
+                            @method('DELETE')
+                            @csrf
+                            <button style="background-color: #FFFFFF; border: none; color: Red;">Delete</button>
+                        @endif
+                        </form>
+                        <br>
+                        &emsp; {{ $comment->comment }}
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="5">No command found</td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
     </div>
     @endif

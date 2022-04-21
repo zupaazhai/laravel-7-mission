@@ -6,6 +6,8 @@ use App\Http\Requests\TopicRequest;
 use App\Topic;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class TopicController extends Controller
 {
@@ -18,9 +20,19 @@ class TopicController extends Controller
     {
         $topics = Topic::with('user')
             ->orderBy('id', 'desc')
-            ->paginate();
+            ->paginate(10);
+          
+        $rows = array();
+        foreach  ($topics  as $topic) {
+            $comments = DB::table('comments')
+            ->where('topic_id', '=', $topic->id)
+            ->count();
+            $rows[] = $comments;   
 
-        return view('home', compact('topics'));
+        } 
+       
+
+        return view('home', compact('topics', 'rows'));
     }
 
     /**
@@ -70,8 +82,14 @@ class TopicController extends Controller
     {
         $topic = Topic::where('id' , $id)
             ->firstOrFail();
+        $comments = DB::table('comments')
+            ->join('users', 'comments.user_id', '=', 'users.id')
+            ->select('comments.*', 'users.name')
+            ->where('comments.topic_id', '=', $id)
+            ->orderBy('comments.id', 'desc')
+            ->paginate();    
 
-        return view('topic.form', compact('topic'));
+        return view('topic.form', compact('topic','comments'));
     }
 
     /**
@@ -104,6 +122,6 @@ class TopicController extends Controller
      */
     public function destroy($id)
     {
-        //
+
     }
 }

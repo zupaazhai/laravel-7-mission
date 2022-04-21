@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Comment;
+use App\Topic;
 use App\Http\Requests\CommentRequest;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,7 @@ class CommentController extends Controller
      */
     public function index()
     {
-        //
+        
     }
 
     /**
@@ -35,6 +36,11 @@ class CommentController extends Controller
      */
     public function store(CommentRequest $request)
     {
+        $comment = new Comment();
+
+        $request->request->add(['user_id' => auth()->user()->id]);
+        $comment->create($request->only(['topic_id', 'comment', 'user_id']));
+
         return back()->with('save_status', [
             'message' => 'Your comment saved',
             'status' => 'success'
@@ -83,6 +89,11 @@ class CommentController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $comment = Comment::find($id);
+        $comment->delete();
+        return back()->with('save_status', [
+            'message' => 'Delete success',
+            'status' => 'success'
+        ]);
     }
 }
