@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\TopicRequest;
 use App\Topic;
+use App\Comment;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+
 
 class TopicController extends Controller
 {
@@ -18,9 +20,23 @@ class TopicController extends Controller
     {
         $topics = Topic::with('user')
             ->orderBy('id', 'desc')
-            ->paginate();
+            ->first()
+            ->Paginate(5); 
 
-        return view('home', compact('topics'));
+        $data = Comment::paginate(5);
+
+        $datatopic = Topic::All();
+
+        $count = $datatopic->count();
+        
+
+        for($i=1;$i<=$count;$i++){
+            $countdata[] = Comment::where('topic_id','=',$i)->count();
+        }
+
+        $datacount = $countdata;
+
+        return view('home', compact('topics',['data'],'datacount'));
     }
 
     /**

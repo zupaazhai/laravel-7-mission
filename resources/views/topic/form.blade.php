@@ -6,6 +6,7 @@
     $isCreate = Request::route()->getName() == 'topics.create';
 @endphp
 
+
 <div class="container">
     <div class="row mb-4">
         <div class="col-12">
@@ -14,15 +15,17 @@
                 {{ session()->get('save_status')['message'] }}
             </div>
             @endif
+            
             <form class="card" method="post" action="{{ $isCreate ? route('topics.store') : route('topics.update', $topic->id ?? 0) }}">
-                @method($isCreate ? 'post' : 'put')
+            @csrf    
+            @method($isCreate ? 'post' : 'put')
                 <div class="card-header">
                     <h3 class="card-title">{{ $isCreate ? 'Create' : 'Edit' }} topic</h3>
                 </div>
                 <div class="card-body">
                     <div class="form-group">
                         <label for="topic">Title</label>
-                        <input value="{{ $topic->title ?? '' }}" class="form-control {{ $errors->has('title') ? 'is-invalid' : '' }}" name="title"></input>
+                        <input type="text" value="{{ $topic->title ?? '' }}" class="form-control {{ $errors->has('title') ? 'is-invalid' : '' }}" name="title"></input>
                         <span class="invalid-feedback">{{ $errors->first('title') }}</span>
                     </div>
                     <div class="form-group">
@@ -48,7 +51,7 @@
                     <label for="comment">Comment</label>
                     <textarea name="comment" class="form-control" placeholder="Write your comment here..." id="" cols="4" rows="4"></textarea>
                 </div>
-                <button class="btn btn-primary">Comment</button>
+                <button class="btn btn-primary mt-2">Comment</button>
             </form>
         </div>
         <div class="col-12">
