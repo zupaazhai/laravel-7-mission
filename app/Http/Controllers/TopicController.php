@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TopicRequest;
+use DB;
 use App\Topic;
+use App\Comment;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
@@ -17,8 +19,15 @@ class TopicController extends Controller
     public function index()
     {
         $topics = Topic::with('user')
-            ->orderBy('id', 'desc')
-            ->paginate();
+            ->leftjoin('comments', 'topics.id', 'comments.topic_id')
+            ->groupBy('topics.id')
+            ->orderBy('topics.id', 'desc')
+            ->select(
+                'topics.*',
+                'comments.topic_id',
+                DB::raw("count(comments.topic_id) as topic_count")
+            )
+            ->paginate(5);
 
         return view('home', compact('topics'));
     }
@@ -71,7 +80,11 @@ class TopicController extends Controller
         $topic = Topic::where('id' , $id)
             ->firstOrFail();
 
-        return view('topic.form', compact('topic'));
+        $comment = Comment::where('topic_id' , $id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('topic.form', compact('topic', 'comment'));
     }
 
     /**
@@ -104,6 +117,7 @@ class TopicController extends Controller
      */
     public function destroy($id)
     {
+        dd('topic');
         //
     }
 }
