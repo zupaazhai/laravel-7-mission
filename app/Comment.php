@@ -6,4 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Comment extends Model
 {
+    protected $table = 'comments';
+    protected $guarded = ['id'];
+
+    public function get_user()
+    {
+        return $this->belongsTo('App\User', 'user_id', 'id');
+    }
 }
