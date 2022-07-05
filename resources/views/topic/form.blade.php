@@ -16,6 +16,7 @@
             @endif
             <form class="card" method="post" action="{{ $isCreate ? route('topics.store') : route('topics.update', $topic->id ?? 0) }}">
                 @method($isCreate ? 'post' : 'put')
+                @csrf
                 <div class="card-header">
                     <h3 class="card-title">{{ $isCreate ? 'Create' : 'Edit' }} topic</h3>
                 </div>
@@ -39,6 +40,31 @@
     </div>
 
     @if (!$isCreate)
+
+        @if (isset($comment))
+            
+            @foreach ($comment as $comments)
+                <div class="card">
+                    <form action="{{ route('comments.destroy',$comments->id) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        
+                        <div class="card-body">
+                            <p><span>By</span> {{ \App\User::findOrFail($comments->user_id)->name }}  ({{ $comments->created_at->format('Y-m-d H:i:s') }}) @if (auth()->user()->id == $comments->user_id)
+                                <button type="submit" onclick="confirm('ต้อการลบใช่หรือไม่?!') || event.preventDefault();" style="color: red;border: none;outline:none;background-color:transparent;">Delete</button></p>
+                            @endif
+                            <div class="container">
+                                {{ $comments->comment }}
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <br>
+            @endforeach
+        @endif
+    
+    <br>    
+        
     <div class="row">
         <div class="col-12">
             <form action="{{ route('comments.store') }}" method="post" class="mb-4">

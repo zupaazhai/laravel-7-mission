@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-12">
             <div class="mb-2 text-right">
-                <a class="btn btn-success" href="#">New Topic</a>
+                <a class="btn btn-success" href="{{ route('topics.create') }}">New Topic</a>
             </div>
             <table class="table table-bordered bg-white table-hover">
                 <thead>
@@ -26,14 +26,22 @@
                         </td>
                         <td>{{ $topic->user->name }}</td>
                         <td>{{ $topic->created_at }}</td>
-                        <td>99</td>
+                        <td>{{ \App\Comment::Where('topic_id',$topic->id)->count() }}</td>
                     </tr>
                     @empty
                     <tr>
                         <td colspan="5">No topic found</td>
                     </tr>
                     @endforelse
+                    
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="8">
+                            {{ $topics->withQueryString()->links() }}
+                        </td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
     </div>
