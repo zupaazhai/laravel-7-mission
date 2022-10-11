@@ -20,5 +20,8 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/comments/delete/{id}', 'CommentController@destroy')->name('comments.delete');
+
 Route::resource('topics', 'TopicController');
 Route::resource('comments', 'CommentController');
+
