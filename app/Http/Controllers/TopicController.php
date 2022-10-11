@@ -17,8 +17,8 @@ class TopicController extends Controller
     public function index()
     {
         $topics = Topic::with('user')
-            ->orderBy('id', 'desc')
-            ->paginate();
+            ->orderBy('id', 'asc')
+            ->paginate(10);
 
         return view('home', compact('topics'));
     }
@@ -68,7 +68,10 @@ class TopicController extends Controller
      */
     public function edit($id)
     {
-        $topic = Topic::where('id' , $id)
+        $topic = Topic::where('id', $id)
+            ->with(['comments' => function ($query) {
+                return $query->with('user')->orderBy('id', 'desc');
+            }])
             ->firstOrFail();
 
         return view('topic.form', compact('topic'));
@@ -83,7 +86,7 @@ class TopicController extends Controller
      */
     public function update(TopicRequest $request, $id)
     {
-        $topic = Topic::where('id' , $id)
+        $topic = Topic::where('id', $id)
             ->firstOrFail();
 
         $topic->title = $request->title;
