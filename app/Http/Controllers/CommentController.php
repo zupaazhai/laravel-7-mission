@@ -13,9 +13,11 @@ class CommentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    
     public function index()
     {
-        //
+        
+        
     }
 
     /**
@@ -35,10 +37,17 @@ class CommentController extends Controller
      */
     public function store(CommentRequest $request)
     {
+        $comment = new comment();
+
+        $request->request->add(['user_id' => auth()->user()->id]);
+
+        $comment->create($request->only(['comment','topic_id','user_id']));
+
         return back()->with('save_status', [
             'message' => 'Your comment saved',
             'status' => 'success'
         ]);
+        
     }
 
     /**
@@ -47,11 +56,20 @@ class CommentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id) //ลบแทน
     {
-        //
+       echo "11";
+       $delete=Comment::find($id)->delete();
+       return back()->with('save_status', [
+        'message' => 'Delete',
+        'status' => 'success'
+    ]);
     }
 
+    public function destroy($id)
+    {
+       
+    }
     /**
      * Show the form for editing the specified resource.
      *
@@ -81,8 +99,6 @@ class CommentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //
-    }
+
+   
 }

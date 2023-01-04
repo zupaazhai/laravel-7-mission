@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\TopicRequest;
 use App\Topic;
+use App\comment;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+
+
 
 class TopicController extends Controller
 {
@@ -17,9 +20,12 @@ class TopicController extends Controller
     public function index()
     {
         $topics = Topic::with('user')
+            
             ->orderBy('id', 'desc')
-            ->paginate();
+            ->paginate(5);
 
+        
+        
         return view('home', compact('topics'));
     }
 
@@ -41,6 +47,8 @@ class TopicController extends Controller
      */
     public function store(TopicRequest $request)
     {
+       
+        
         $topic = new Topic();
 
         $request->request->add(['user_id' => auth()->user()->id]);
@@ -70,9 +78,11 @@ class TopicController extends Controller
     {
         $topic = Topic::where('id' , $id)
             ->firstOrFail();
-
-        return view('topic.form', compact('topic'));
+        $comments =Comment::where('topic_id','=', $id)->get();
+       
+        return view('topic.form', compact('topic','comments'));
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -105,5 +115,6 @@ class TopicController extends Controller
     public function destroy($id)
     {
         //
+        
     }
 }

@@ -4,6 +4,8 @@
 
 @php
     $isCreate = Request::route()->getName() == 'topics.create';
+    $user_auth = Auth::user();
+  
 @endphp
 
 <div class="container">
@@ -15,6 +17,7 @@
             </div>
             @endif
             <form class="card" method="post" action="{{ $isCreate ? route('topics.store') : route('topics.update', $topic->id ?? 0) }}">
+                @csrf
                 @method($isCreate ? 'post' : 'put')
                 <div class="card-header">
                     <h3 class="card-title">{{ $isCreate ? 'Create' : 'Edit' }} topic</h3>
@@ -32,13 +35,36 @@
                     </div>
                 </div>
                 <div class="card-footer">
+                    
                     <button class="btn btn-success">{{ $isCreate ? 'New' : 'Update' }} topic</button>
                 </div>
             </form>
         </div>
     </div>
 
+
+
+
+
     @if (!$isCreate)
+        @forelse ($comments as $comment)
+        <div class='rounded border p-3 bg-white mb-2'>
+           <h3> BY  {{$comment->user->name}} ({{$comment->created_at}}) 
+           @if ($comment->user_id ==$user_auth->id)
+                <a class='btn btn-danger ml-2 text-white' href="{{route('comments.show',$comment->id) }}">Delete</a>
+            @else
+                
+            @endif
+                
+            </h3>   
+            <h4 class='p-3'>{{$comment->comment}}</h4>
+        </div>
+        @empty
+        <h3 class='rounded border p-3 bg-white'>
+            NO COMMENT
+        </h3>
+        @endforelse
+
     <div class="row">
         <div class="col-12">
             <form action="{{ route('comments.store') }}" method="post" class="mb-4">
