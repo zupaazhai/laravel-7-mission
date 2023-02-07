@@ -15,6 +15,7 @@
             </div>
             @endif
             <form class="card" method="post" action="{{ $isCreate ? route('topics.store') : route('topics.update', $topic->id ?? 0) }}">
+                @csrf
                 @method($isCreate ? 'post' : 'put')
                 <div class="card-header">
                     <h3 class="card-title">{{ $isCreate ? 'Create' : 'Edit' }} topic</h3>
@@ -46,12 +47,27 @@
                 <input type="hidden" name="topic_id" value="{{ $topic->id ?? '' }}">
                 <div class="form-group">
                     <label for="comment">Comment</label>
-                    <textarea name="comment" class="form-control" placeholder="Write your comment here..." id="" cols="4" rows="4"></textarea>
+                    <textarea name="comment" class="form-control" placeholder="Write your comment here..." id="" cols="4" rows="4" required></textarea>
                 </div>
                 <button class="btn btn-primary">Comment</button>
             </form>
         </div>
         <div class="col-12">
+            @foreach ($comment as $item)
+                <div class="alert alert-secondary" role="alert">
+                    <h4 class="alert-heading">By {{ $item->user->name }} {{ $item->created_at }} 
+                        @if($item->user_id == auth()->user()->id)
+                            <form action="{{ route('comments.destroy',$item->id) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm"  onclick="return confirm('Are you sure?')">Delete</button>
+                            </form>
+                        @endif
+                    </h4>
+                    <hr>
+                    <p class="mb-0">{{ $item->comment }}</p>
+                </div>
+            @endforeach
         </div>
     </div>
     @endif
