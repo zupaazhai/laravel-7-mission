@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\TopicRequest;
 use App\Topic;
+use App\Comment;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
@@ -18,7 +19,7 @@ class TopicController extends Controller
     {
         $topics = Topic::with('user')
             ->orderBy('id', 'desc')
-            ->paginate();
+            ->paginate(15);
 
         return view('home', compact('topics'));
     }
@@ -70,8 +71,10 @@ class TopicController extends Controller
     {
         $topic = Topic::where('id' , $id)
             ->firstOrFail();
+        
+        $comment = Comment::where('topic_id' , $id)->orderBy('created_at', 'desc')->get();
 
-        return view('topic.form', compact('topic'));
+        return view('topic.form', compact('topic','comment'));
     }
 
     /**
