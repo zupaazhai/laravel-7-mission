@@ -15,7 +15,7 @@ class CommentController extends Controller
      */
     public function index()
     {
-        //
+
     }
 
     /**
@@ -25,6 +25,7 @@ class CommentController extends Controller
      */
     public function create(Request $request)
     {
+
     }
 
     /**
@@ -35,6 +36,11 @@ class CommentController extends Controller
      */
     public function store(CommentRequest $request)
     {
+        $comment = new Comment();
+
+        $request->request->add(['user_id' => auth()->user()->id]);
+        $comment->create($request->only(['topic_id', 'comment', 'user_id']));
+
         return back()->with('save_status', [
             'message' => 'Your comment saved',
             'status' => 'success'
@@ -49,7 +55,7 @@ class CommentController extends Controller
      */
     public function show($id)
     {
-        //
+
     }
 
     /**
@@ -60,7 +66,7 @@ class CommentController extends Controller
      */
     public function edit($id)
     {
-        //
+
     }
 
     /**
@@ -81,8 +87,12 @@ class CommentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Comment $comment)
     {
-        //
+        $comment->delete();
+        return back()->with('save_status', [
+            'message' => 'Your comment has Delete',
+            'status' => 'success'
+        ]);
     }
 }

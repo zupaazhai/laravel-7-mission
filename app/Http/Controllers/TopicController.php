@@ -7,6 +7,10 @@ use App\Topic;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
+use App\Comment;
+
+
+
 class TopicController extends Controller
 {
     /**
@@ -17,10 +21,23 @@ class TopicController extends Controller
     public function index()
     {
         $topics = Topic::with('user')
-            ->orderBy('id', 'desc')
-            ->paginate();
+            ->orderBy('topics.id', 'desc')
+            ->get();
 
-        return view('home', compact('topics'));
+        $ids = $topics->groupBy('id')->keys();
+        $data = [];
+
+        foreach ($ids as $id) {
+            $count = Comment::where('topic_id', $id)
+                ->count();
+            $data[] = [
+                'topics' => $topics,
+                'comments' => $count,
+            ];
+        }
+        // dd($data);
+
+        return view('home', compact('data'));
     }
 
     /**
@@ -68,10 +85,22 @@ class TopicController extends Controller
      */
     public function edit($id)
     {
-        $topic = Topic::where('id' , $id)
+        $topic = Topic::where('id', $id)
             ->firstOrFail();
 
-        return view('topic.form', compact('topic'));
+        $comments = Comment::query()
+            ->where('topic_id', $id)
+            ->join('users', 'users.id', '=', 'comments.user_id')
+            ->get([
+                'comments.id as id',
+                'users.id as user_id',
+                'users.name as name',
+                'comments.updated_at',
+                'comments.comment',
+
+            ]);
+
+        return view('topic.form', compact('topic', 'comments'));
     }
 
     /**
@@ -83,7 +112,7 @@ class TopicController extends Controller
      */
     public function update(TopicRequest $request, $id)
     {
-        $topic = Topic::where('id' , $id)
+        $topic = Topic::where('id', $id)
             ->firstOrFail();
 
         $topic->title = $request->title;
